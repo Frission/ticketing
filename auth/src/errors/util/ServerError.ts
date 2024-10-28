@@ -6,6 +6,6 @@ export abstract class ServerError extends Error {
         Object.setPrototypeOf(this, ServerError.prototype)
     }
 
-    public abstract serializeErrors(): Array<ErrorDescription>
     public abstract readonly statusCode: number
+    public abstract serializeErrors(): Array<ErrorDescription>
 }

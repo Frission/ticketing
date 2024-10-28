@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { PasswordUtils } from "../util/PasswordUtils"
 
 interface UserProps {
     email: string
@@ -23,6 +24,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+})
+
+userSchema.pre("save", async function (done) {
+    if (this.isModified("password")) {
+        const hashed = await PasswordUtils.toHash(this.password)
+        this.password = hashed
+    }
+    done()
 })
 
 userSchema.statics.build = (props: UserProps) => {
