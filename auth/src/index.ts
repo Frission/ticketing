@@ -2,14 +2,14 @@ import express, { json } from "express"
 import "express-async-errors"
 import mongoose from "mongoose"
 
+import cookieSession from "cookie-session"
+import { DatabaseConnectionError } from "./errors/DatabaseConnectionError"
+import { NotFoundError } from "./errors/NotFoundError"
+import { errorHandler } from "./middlewares/errorHandler"
 import { currentUserRouter } from "./routes/currentUser"
 import { signInRouter } from "./routes/signin"
 import { signOutRouter } from "./routes/signout"
 import { signUpRouter } from "./routes/signup"
-import { errorHandler } from "./middlewares/errorHandler"
-import { NotFoundError } from "./errors/NotFoundError"
-import { DatabaseConnectionError } from "./errors/DatabaseConnectionError"
-import cookieSession from "cookie-session"
 
 const app = express()
 app.set("trust proxy", true)
