@@ -14,7 +14,7 @@ const middlewares = [
     validateRequest,
 ]
 
-router.get("/api/users/signin", middlewares, async (req: Request, res: Response) => {
+router.post("/api/users/signin", middlewares, async (req: Request, res: Response) => {
     const { email, password } = req.body
 
     const existingUser = await User.findOne({ email })
