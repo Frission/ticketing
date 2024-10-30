@@ -12,7 +12,7 @@ export class PasswordUtils {
 
     static async compare(storedPassword: string, suppliedPassword: string): Promise<boolean> {
         const [hashedPassword, salt] = storedPassword.split(".")
-        const buffer = (await scryptAsync(salt, hashedPassword, 64)) as Buffer
+        const buffer = (await scryptAsync(salt, suppliedPassword, 64)) as Buffer
         return buffer.toString("hex") === hashedPassword
     }
 }
