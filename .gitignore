@@ -1,6 +1,7 @@
 *.~
 */dist
 */.cache
+.secrets
 
 # Logs
 logs

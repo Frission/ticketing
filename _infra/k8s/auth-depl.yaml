@@ -16,6 +16,12 @@ spec:
                 - name: auth
                   image: frission/auth:latest
                   imagePullPolicy: Never
+                  env:
+                      - name: JWT_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: jwt-secret
+                                key: JWT_KEY
                   resources:
                       limits:
                           memory: "512M"
