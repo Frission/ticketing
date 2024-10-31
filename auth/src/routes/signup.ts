@@ -8,7 +8,12 @@ import { User } from "../models/User"
 const router = express.Router()
 
 const middlewares = [
-    body("email").isString().isEmail().isLength({ min: 3, max: 250 }).withMessage("E-mail must be valid"),
+    body("email")
+        .isString()
+        .isEmail()
+        .withMessage("E-mail must be valid")
+        .isLength({ min: 3, max: 250 })
+        .withMessage("E-mail must be valid"),
     body("password")
         .isString()
         .trim()

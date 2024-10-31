@@ -4,7 +4,7 @@ import { ServerError } from "../errors/util/ServerError"
 
 export const errorHandler: ErrorRequestHandler = (err: Partial<Error>, req, res, next) => {
     if (err instanceof ServerError) {
-        res.status(err.statusCode).send(err.serializeErrors())
+        res.status(err.statusCode).send({ errors: err.serializeErrors() })
         return
     }
 
