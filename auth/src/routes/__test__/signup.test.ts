@@ -37,7 +37,7 @@ describe("Signup Tests", () => {
         return await request(app).post("/api/users/signup").send({ password: "test123" }).expect(400)
     })
 
-    it("should not be able tp sign up with a duplicate e-mail", async () => {
+    it("should not be able to sign up with a duplicate e-mail", async () => {
         await request(app)
             .post("/api/users/signup")
             .send({
@@ -53,5 +53,17 @@ describe("Signup Tests", () => {
                 password: "test123",
             })
             .expect(400)
+    })
+
+    it("sets a cookie after a successfull sign up", async () => {
+        const response = await request(app)
+            .post("/api/users/signup")
+            .send({
+                email: "test@test.com",
+                password: "test123",
+            })
+            .expect(201)
+
+        expect(response.get("Set-Cookie")).toBeDefined()
     })
 })

@@ -14,18 +14,17 @@ const middlewares = [
         .trim()
         .isLength({ min: 4, max: 20 })
         .withMessage("Password must be between 4 and 20 characters"),
-        validateRequest
+    validateRequest,
 ]
 
 router.post("/api/users/signup", middlewares, async (req: Request, res: Response) => {
-    console.log("Creating a user...")
-
     const { email, password } = req.body
 
     if (await User.exists({ email })) {
         throw new BadRequestError("Email is already in use")
     }
 
+    console.log("Creating a user:"), { email, password }
     const user = User.build({ email, password })
     await user.save()
 
