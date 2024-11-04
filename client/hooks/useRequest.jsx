@@ -1,6 +1,13 @@
 import React from "react"
 import axios from "axios"
 
+/**
+ * @param {Object} config - Request config
+ * @param {!string} config.url - Url to make the request to.
+ * @param {!("post" | "get" | "put" | "delete")} config.method - Request method, lowercase
+ * @param {?string} config.body - Parameters to send inside the body if this is a post or put request
+ * @param {?() => Object} config.onSuccess - Callback to be invoked when request succeeds
+ */
 export const useRequest = ({ url, method, body, onSuccess }) => {
     const [errors, setErrors] = React.useState(null)
 
