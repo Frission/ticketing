@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express"
 import { body } from "express-validator"
-import { validateRequest } from "../middlewares/validateRequest"
 import { User } from "../models/User"
-import { BadRequestError } from "../errors/BadRequestError"
 import { PasswordUtils } from "../util/PasswordUtils"
 import jwt from "jsonwebtoken"
+import { validateRequest, BadRequestError } from "@frissionapps/common"
 
 const router = express.Router()
 

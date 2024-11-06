@@ -1,5 +1,5 @@
+import { currentUser } from "@frissionapps/common"
 import express from "express"
-import { currentUser } from "../middlewares/currentUser"
 
 const router = express.Router()
 
