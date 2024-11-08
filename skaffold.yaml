@@ -15,6 +15,14 @@ build:
               manual:
                   - src: "src/**/*.(ts|tsx|js|jsx)"
                     dest: .
+        - image: frission/tickets
+          context: tickets
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "src/**/*.(ts|tsx|js|jsx)"
+                    dest: .
         - image: frission/client
           context: client
           docker:

@@ -28,7 +28,7 @@ router.post("/api/users/signup", middlewares, async (req: Request, res: Response
         throw new BadRequestError("Email is already in use")
     }
 
-    console.log("Creating a user:"), { email, password }
+    console.log("Creating a user:"), { email }
     const user = User.build({ email, password })
     await user.save()
 
