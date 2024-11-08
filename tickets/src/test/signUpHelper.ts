@@ -1,7 +1,6 @@
-import { app } from "../app"
 import jwt from "jsonwebtoken"
 
-export const testSignUp = async (credentials: { email?: string } = {}) => {
+export const testSignUp = (credentials: { email?: string } = {}) => {
     const payload = { email: "test@test.com", ...credentials, id: "123" }
 
     const session = { jwt: jwt.sign(payload, process.env.JWT_KEY!) }
