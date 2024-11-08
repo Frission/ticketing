@@ -3,7 +3,7 @@ import mongoose, { StringExpressionOperatorReturningNumber } from "mongoose"
 interface TicketProps {
     title: string
     price: number
-    userId: StringExpressionOperatorReturningNumber
+    userId: string
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
