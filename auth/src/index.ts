@@ -7,8 +7,12 @@ const start = async () => {
         throw new Error("JWT key must be defined")
     }
 
+    if (!process.env.MONGO_URI) {
+        throw new Error("ENV: Mongo URI must be defined.")
+    }
+
     try {
-        await mongoose.connect("mongodb://auth-mongo-srv:27017/auth")
+        await mongoose.connect(process.env.MONGO_URI)
         console.log("Connected to Mongo DB")
     } catch (err) {
         console.error(err)
