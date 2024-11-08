@@ -1,12 +1,13 @@
 import request from "supertest"
 import { app } from "../../app"
 import { testSignUp } from "../../test/signUpHelper"
+import { Ticket } from "../../models/Ticket"
 
 describe("Ticket Creation Tests", () => {
     let sessionCookie = [""]
 
     beforeAll(async () => {
-        sessionCookie = await testSignUp({ email: "test@test.com", password: "test123" })
+        sessionCookie = await testSignUp({ email: "test@test.com" })
     })
 
     it("has a route handler listening to /api/tickets for post requests", async () => {
@@ -48,7 +49,10 @@ describe("Ticket Creation Tests", () => {
     })
 
     it("successfully creates a ticket with valid parameters", async () => {
-        const response = await request(app)
+        let tickets = await Ticket.find({})
+        expect(tickets.length).toEqual(0)
+
+        await request(app)
             .post("/api/tickets")
             .set("Cookie", sessionCookie)
             .send({
@@ -56,5 +60,10 @@ describe("Ticket Creation Tests", () => {
                 price: 10,
             })
             .expect(201)
+
+        tickets = await Ticket.find({})
+        expect(tickets.length).toEqual(1)
+        expect(tickets[0].title).toEqual("hello")
+        expect(tickets[0].price).toEqual(10)
     })
 })
