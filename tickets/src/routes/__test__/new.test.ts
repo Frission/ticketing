@@ -6,8 +6,8 @@ import { Ticket } from "../../models/Ticket"
 describe("Ticket Creation Tests", () => {
     let sessionCookie = [""]
 
-    beforeAll(async () => {
-        sessionCookie = await testSignUp({ email: "test@test.com" })
+    beforeAll(() => {
+        sessionCookie = testSignUp({ email: "test@test.com" })
     })
 
     it("has a route handler listening to /api/tickets for post requests", async () => {
