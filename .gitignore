@@ -2,7 +2,7 @@
 */dist
 */.cache
 .secrets
-.vscode
+.vscode/
 
 # Logs
 logs
