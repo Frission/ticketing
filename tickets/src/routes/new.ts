@@ -1,4 +1,4 @@
-import { currentUser, requireAuth, validateRequest } from "@frissionapps/common"
+import { requireAuth, validateRequest } from "@frissionapps/common"
 import express, { Request, Response } from "express"
 import { body } from "express-validator"
 import { Ticket } from "../models/Ticket"
@@ -19,7 +19,9 @@ const createTicketMiddlewares = [
 router.post("/api/tickets", createTicketMiddlewares, async (req: Request, res: Response) => {
     const { title, price } = req.body
     const ticket = Ticket.build({ title, price, userId: req.currentUser!.id })
+    console.log("cretaed ticket", ticket.toJSON())
     await ticket.save()
+    console.log("sending response")
     res.status(201).send(ticket)
 })
 
