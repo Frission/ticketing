@@ -20,7 +20,7 @@ spec:
                       - containerPort: 8222 # HTTP monitoring
                       - containerPort: 6222 # Cluster communication
                   args: [
-                          "--jetstream",
+                          "-js", # Enable Jetstream
                           "--port",
                           "4222",
                           "--http_port",
