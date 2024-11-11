@@ -25,6 +25,9 @@ spec:
                           "4222",
                           "--http_port",
                           "8222",
+                          "-D",
+                          "--name",
+                          "ticketing"
                       ]
                   volumeMounts:
                       - name: nats-data
@@ -40,14 +43,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: nats
+    name: nats-srv
 spec:
     ports:
         - name: client-connections
+          protocol: TCP
           port: 4222
+          targetPort: 4222
         - name: http-monitoring
+          protocol: TCP
           port: 8222
+          targetPort: 8222
         - name: cluster-communication
+          protocol: TCP
           port: 6222
+          targetPort: 6222
     selector:
         app: nats
