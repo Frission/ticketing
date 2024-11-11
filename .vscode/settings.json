@@ -1,6 +1,0 @@
-{
-    "yaml.schemas": {
-        "file:///Users/firat/.vscode/extensions/atlassian.atlascode-3.0.3/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
-        "kubernetes://schema/v1%40service": "file:///Users/firat/Documents/Learning/microservices-node/ticketing/_infra/k8s/auth-depl.yaml"
-    }
-}

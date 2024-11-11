@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: nats-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: nats
+    template:
+        metadata:
+            labels:
+                app: nats
+        spec:
+            containers:
+                - name: nats
+                  image: nats:latest
+                  ports:
+                      - containerPort: 4222 # Client connections
+                      - containerPort: 8222 # HTTP monitoring
+                      - containerPort: 6222 # Cluster communication
+                  args: [
+                          "--jetstream",
+                          "--port",
+                          "4222",
+                          "--http_port",
+                          "8222",
+                      ]
+                  volumeMounts:
+                      - name: nats-data
+                        mountPath: /data
+                  resources:
+                      limits:
+                          memory: "512M"
+                          cpu: "1"
+            volumes:
+                - name: nats-data
+                  emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: nats
+spec:
+    ports:
+        - name: client-connections
+          port: 4222
+        - name: http-monitoring
+          port: 8222
+        - name: cluster-communication
+          port: 6222
+    selector:
+        app: nats
