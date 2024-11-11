@@ -3,6 +3,7 @@
 */.cache
 .secrets
 .vscode/
+_nats-demo/
 
 # Logs
 logs
