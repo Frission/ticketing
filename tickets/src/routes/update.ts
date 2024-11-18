@@ -2,6 +2,8 @@ import express, { Request, Response } from "express"
 import { Ticket } from "../models/Ticket"
 import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from "@frissionapps/common"
 import { body } from "express-validator"
+import { TicketUpdatedPublisher } from "../events/publishers/TicketUpdatedPublisher"
+import { natsWrapper } from "../util/NatsWrapper"
 
 const router = express.Router()
 
@@ -41,6 +43,13 @@ router.put("/api/tickets/:id", updateTicketMiddlewares, async (req: Request, res
 
     ticket.set({ title: req.body.title, price: req.body.price })
     await ticket.save()
+
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+    })
 
     res.send(ticket)
 })
