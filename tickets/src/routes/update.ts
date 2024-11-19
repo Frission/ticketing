@@ -43,7 +43,6 @@ router.put("/api/tickets/:id", updateTicketMiddlewares, async (req: Request, res
 
     ticket.set({ title: req.body.title, price: req.body.price })
     await ticket.save()
-
     new TicketUpdatedPublisher(natsWrapper.client).publish({
         id: ticket.id,
         title: ticket.title,

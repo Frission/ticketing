@@ -2,6 +2,7 @@ import request from "supertest"
 import { app } from "../../app"
 import { testSignUp } from "../../test/signUpHelper"
 import { Ticket } from "../../models/Ticket"
+import { natsWrapper } from "../../util/NatsWrapper"
 
 describe("Ticket Creation Tests", () => {
     let sessionCookie = [""]
@@ -65,5 +66,18 @@ describe("Ticket Creation Tests", () => {
         expect(tickets.length).toEqual(1)
         expect(tickets[0].title).toEqual("hello")
         expect(tickets[0].price).toEqual(10)
+    })
+
+    it("publishes an event", async () => {
+        await request(app)
+            .post("/api/tickets")
+            .set("Cookie", sessionCookie)
+            .send({
+                title: "hello",
+                price: 10,
+            })
+            .expect(201)
+
+        expect(natsWrapper.client.publish).toHaveBeenCalled()
     })
 })

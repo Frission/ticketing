@@ -1,9 +1,36 @@
 import { MongoMemoryServer } from "mongodb-memory-server"
 import mongoose from "mongoose"
 
+const natsWrapper = {
+    client: {
+        publish: jest.fn(),
+    },
+}
+
+jest.mock("../util/NatsWrapper", () => {
+    return { natsWrapper }
+})
+
+jest.mock("../events/publishers/TicketCreatedPublisher", () => {
+    return {
+        TicketCreatedPublisher: jest.fn().mockImplementation(() => ({
+            publish: jest.fn().mockImplementation(() => natsWrapper.client.publish()),
+        })),
+    }
+})
+
+jest.mock("../events/publishers/TicketUpdatedPublisher", () => {
+    return {
+        TicketUpdatedPublisher: jest.fn().mockImplementation(() => ({
+            publish: jest.fn().mockImplementation(() => natsWrapper.client.publish()),
+        })),
+    }
+})
+
 let mongo: MongoMemoryServer
 
 beforeAll(async () => {
+    jest.clearAllMocks()
     process.env.JWT_KEY = "testkey"
 
     mongo = await MongoMemoryServer.create()
