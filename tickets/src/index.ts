@@ -4,13 +4,9 @@ import mongoose from "mongoose"
 import { natsWrapper } from "./util/NatsWrapper"
 
 const start = async () => {
-    if (!process.env.JWT_KEY) {
-        throw new Error("ENV: JWT key must be defined")
-    }
-
-    if (!process.env.MONGO_URI) {
-        throw new Error("ENV: Mongo URI must be defined.")
-    }
+    if (!process.env.JWT_KEY) throw new Error("ENV: JWT key must be defined")
+    if (!process.env.MONGO_URI) throw new Error("ENV: Mongo URI must be defined.")
+    if (!process.env.NATS_URL) throw new Error("ENV: NATS URL must be defined.")
 
     try {
         await mongoose.connect(process.env.MONGO_URI)
@@ -21,7 +17,7 @@ const start = async () => {
     }
 
     try {
-        await natsWrapper.connect({ servers: "localhost:4222" })
+        await natsWrapper.connect({ servers: [process.env.NATS_URL] })
         natsWrapper.client
             .closed()
             .then(() => {

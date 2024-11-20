@@ -27,7 +27,7 @@ spec:
                           "8222",
                           "-D",
                           "--name",
-                          "ticketing"
+                          "ticketing",
                       ]
                   volumeMounts:
                       - name: nats-data
