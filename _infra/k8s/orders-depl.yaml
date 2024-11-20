@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: tickets-depl
+    name: orders-depl
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: tickets
+            app: orders
     template:
         metadata:
             labels:
-                app: tickets
+                app: orders
         spec:
             containers:
-                - name: tickets
-                  image: frission/tickets:latest
+                - name: orders
+                  image: frission/orders:latest
                   imagePullPolicy: Never
                   env:
                       - name: MONGO_URI
-                        value: "mongodb://tickets-mongo-srv:27017/tickets"
+                        value: "mongodb://orders-mongo-srv:27017/orders"
                       - name: NATS_URL
                         value: "nats://nats-srv:4222"
                       - name: JWT_KEY
@@ -30,13 +30,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: tickets-srv
+    name: orders-srv
 spec:
     selector:
-        app: tickets
+        app: orders
     type: ClusterIP
     ports:
-        - name: tickets
+        - name: orders
           protocol: TCP
           port: 3000
           targetPort: 3000
