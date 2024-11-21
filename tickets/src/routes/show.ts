@@ -1,6 +1,6 @@
+import { BadRequestError, NotFoundError } from "@frissionapps/common"
 import express, { Request, Response } from "express"
 import { Ticket } from "../models/Ticket"
-import { BadRequestError, NotFoundError } from "@frissionapps/common"
 
 const router = express.Router()
 
