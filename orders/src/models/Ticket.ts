@@ -1,19 +1,20 @@
 import mongoose from "mongoose"
+import { Order } from "./Order"
+import { OrderStatus } from "@frissionapps/common"
 
 interface TicketProps {
     title: string
     price: number
-    userId: string
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
     build(props: TicketProps): TicketDoc
 }
 
-interface TicketDoc extends mongoose.Document {
+export interface TicketDoc extends mongoose.Document {
     title: string
     price: number
-    userId: string
+    isReserved(): Promise<boolean>
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -25,11 +26,7 @@ const ticketSchema = new mongoose.Schema(
         price: {
             type: Number,
             required: true,
-            min: 0
-        },
-        userId: {
-            type: String,
-            required: true,
+            min: 0,
         },
     },
     {
@@ -37,7 +34,6 @@ const ticketSchema = new mongoose.Schema(
             transform: (doc, ret) => {
                 ret.id = ret._id
                 delete ret._id
-                delete ret.__v
             },
         },
     },
@@ -45,6 +41,17 @@ const ticketSchema = new mongoose.Schema(
 
 ticketSchema.statics.build = (props: TicketProps) => {
     return new Ticket(props)
+}
+
+ticketSchema.statics.isReserved = async function() {
+    const existingOrder = await Order.findOne({
+        ticket: this,
+        status: {
+            $in: [OrderStatus.Created, OrderStatus.AwaitingPayment, OrderStatus.Complete],
+        },
+    })
+
+    return existingOrder != null
 }
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema)
