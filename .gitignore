@@ -4,6 +4,7 @@
 .secrets
 .vscode/
 _nats-demo/
+replace.sh
 
 # Logs
 logs
