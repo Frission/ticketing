@@ -34,4 +34,6 @@ describe("Delete Order Tests", () => {
 
         expect(deletedOrder?.status).toEqual(OrderStatus.Cancelled)
     })
+
+    it.todo("emits an order deleted event")
 })
