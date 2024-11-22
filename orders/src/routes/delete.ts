@@ -1,6 +1,8 @@
 import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requireAuth } from "@frissionapps/common"
 import express, { Request, Response } from "express"
 import { Order } from "../models/Order"
+import { OrderCancelledPublisher } from "../events/publishers/OrderCancelledPublisher"
+import { natsWrapper } from "../util/NatsWrapper"
 
 const router = express.Router()
 
@@ -25,7 +27,16 @@ router.delete("/api/orders/:orderId", requireAuth, async (req: Request, res: Res
     order.status = OrderStatus.Cancelled
     await order.save()
 
-    // fire an order deleted event
+    // Fire an order cancelled event
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+        userId: req.currentUser!.id,
+        id: order.id,
+        expiresAt: order.expiresAt.toISOString(),
+        ticket: {
+            id: order.ticket.id,
+            price: order.ticket.price,
+        },
+    })
 
     res.status(204).send(order)
 })
