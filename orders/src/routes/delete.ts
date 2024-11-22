@@ -15,7 +15,7 @@ router.delete("/api/orders/:orderId", requireAuth, async (req: Request, res: Res
 
     let order
     try {
-        order = await Order.findById(orderId)
+        order = await Order.findById(orderId).populate("ticket")
     } catch (err) {
         console.error(err)
         throw new BadRequestError("Please provide a valid id")
