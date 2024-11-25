@@ -2,6 +2,8 @@ import { DatabaseConnectionError } from "@frissionapps/common"
 import { app } from "./app"
 import mongoose from "mongoose"
 import { natsWrapper } from "./util/NatsWrapper"
+import { TicketCreatedListener } from "./events/listeners/TicketCreatedListener"
+import { TicketUpdatedListener } from "./events/listeners/TicketUpdatedListener"
 
 const start = async () => {
     if (!process.env.JWT_KEY) throw new Error("ENV: JWT key must be defined")
@@ -28,6 +30,10 @@ const start = async () => {
                 console.error(err)
                 process.exit(1)
             })
+
+        await new TicketCreatedListener(natsWrapper.client).listen()
+        await new TicketUpdatedListener(natsWrapper.client).listen()
+
         console.log("Connected to NATS Server")
     } catch (err) {
         console.error(err)

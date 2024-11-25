@@ -5,6 +5,7 @@ import request from "supertest"
 import { Ticket } from "../../models/Ticket"
 import { OrderStatus } from "@frissionapps/common"
 import { Order } from "../../models/Order"
+import { natsWrapper } from "../../util/NatsWrapper"
 
 const userId = "123"
 
@@ -41,10 +42,21 @@ describe("Order Creation Tests", () => {
         const ticket = Ticket.build({ title: "Concert", price: 20 })
         await ticket.save()
 
-        const orderResponse = await request(app).post("/api/orders").set("Cookie", sessionCookie).send({ ticketId: ticket.id }).expect(201)
+        const orderResponse = await request(app)
+            .post("/api/orders")
+            .set("Cookie", sessionCookie)
+            .send({ ticketId: ticket.id })
+            .expect(201)
 
         expect(orderResponse.body.status).toEqual(OrderStatus.Created)
     })
 
-    it.todo("emits an order created event")
+    it("publishes an order created event", async () => {
+        const ticket = Ticket.build({ title: "Concert", price: 20 })
+        await ticket.save()
+
+        await request(app).post("/api/orders").set("Cookie", sessionCookie).send({ ticketId: ticket.id }).expect(201)
+
+        expect(natsWrapper.client.publish).toHaveBeenCalled()
+    })
 })

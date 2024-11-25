@@ -4,6 +4,7 @@ import { testSignUp } from "../../test/signUpHelper"
 import { OrderStatus } from "@frissionapps/common"
 import { app } from "../../app"
 import { Order } from "../../models/Order"
+import { natsWrapper } from "../../util/NatsWrapper"
 
 describe("Delete Order Tests", () => {
     let sessionCookie = [""]
@@ -35,5 +36,22 @@ describe("Delete Order Tests", () => {
         expect(deletedOrder?.status).toEqual(OrderStatus.Cancelled)
     })
 
-    it.todo("emits an order deleted event")
+    it("publishes an order cancelled event", async () => {
+        const ticket = Ticket.build({ title: "Concert", price: 20 })
+        await ticket.save()
+
+        const orderResponse = await request(app)
+            .post("/api/orders")
+            .set("Cookie", sessionCookie)
+            .send({ ticketId: ticket.id })
+            .expect(201)
+
+        await request(app)
+            .delete(`/api/orders/${orderResponse.body.id}`)
+            .set("Cookie", sessionCookie)
+            .send()
+            .expect(204)
+
+        expect(natsWrapper.client.publish).toHaveBeenCalled()
+    })
 })

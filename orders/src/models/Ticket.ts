@@ -3,6 +3,7 @@ import { Order } from "./Order"
 import { OrderStatus } from "@frissionapps/common"
 
 interface TicketProps {
+    _id?: string
     title: string
     price: number
 }
@@ -11,9 +12,10 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
     build(props: TicketProps): TicketDoc
 }
 
-export interface TicketDoc extends mongoose.Document {
+export interface TicketDoc extends Omit<mongoose.Document, "__v"> {
     title: string
     price: number
+    version: number
     isReserved(): Promise<boolean>
 }
 
@@ -36,6 +38,8 @@ const ticketSchema = new mongoose.Schema(
                 delete ret._id
             },
         },
+        optimisticConcurrency: true,
+        versionKey: "version",
     },
 )
 
@@ -43,7 +47,7 @@ ticketSchema.statics.build = (props: TicketProps) => {
     return new Ticket(props)
 }
 
-ticketSchema.methods.isReserved = async function() {
+ticketSchema.methods.isReserved = async function () {
     const existingOrder = await Order.findOne({
         ticket: this,
         status: {

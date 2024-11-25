@@ -10,10 +10,11 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
     build(props: TicketProps): TicketDoc
 }
 
-interface TicketDoc extends mongoose.Document {
+interface TicketDoc extends Omit<mongoose.Document, "__v"> {
     title: string
     price: number
     userId: string
+    version: number
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -25,7 +26,7 @@ const ticketSchema = new mongoose.Schema(
         price: {
             type: Number,
             required: true,
-            min: 0
+            min: 0,
         },
         userId: {
             type: String,
@@ -37,9 +38,10 @@ const ticketSchema = new mongoose.Schema(
             transform: (doc, ret) => {
                 ret.id = ret._id
                 delete ret._id
-                delete ret.__v
             },
         },
+        optimisticConcurrency: true,
+        versionKey: "version",
     },
 )
 

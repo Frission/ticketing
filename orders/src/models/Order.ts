@@ -13,11 +13,12 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
     build(props: OrderProps): OrderDoc
 }
 
-interface OrderDoc extends mongoose.Document {
+interface OrderDoc extends Omit<mongoose.Document, "__v"> {
     userId: string
     status: OrderStatus
     expiresAt: Date
     ticket: TicketDoc
+    version: number
 }
 
 const orderSchema = new mongoose.Schema(
@@ -46,9 +47,10 @@ const orderSchema = new mongoose.Schema(
             transform: (doc, ret) => {
                 ret.id = ret._id
                 delete ret._id
-                delete ret.__v
             },
         },
+        optimisticConcurrency: true,
+        versionKey: "version",
     },
 )
 

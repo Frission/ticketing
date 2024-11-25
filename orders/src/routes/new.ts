@@ -48,6 +48,7 @@ router.post("/api/orders", middlewares, async (req: Request, res: Response) => {
         id: order.id,
         status: order.status,
         expiresAt: order.expiresAt.toISOString(),
+        version: order.version,
         ticket: {
             id: order.ticket.id,
             price: order.ticket.price,
