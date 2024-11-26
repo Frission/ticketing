@@ -10,7 +10,7 @@ export class TicketUpdatedListener extends NatsListener<TicketUpdatedEvent> {
     async onMessage(data: TicketUpdatedEvent["data"], msg: JsMsg): Promise<void> {
         try {
             const { id, title, price, version } = data
-            const ticket = await Ticket.findOne({ _id: id, version: version - 1 })
+            const ticket = await Ticket.findByEvent(data)
             if (ticket === null) throw new Error("Ticket not found with id: " + id + " and version: " + version)
             ticket.title = title
             ticket.price = price

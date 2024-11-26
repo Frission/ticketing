@@ -11,6 +11,8 @@ jest.mock("../util/NatsWrapper", () => {
     return { natsWrapper }
 })
 
+jest.mock("@frissionapps/common/build/events/NatsListener")
+
 jest.mock("../events/publishers/OrderCreatedPublisher", () => {
     return {
         OrderCreatedPublisher: jest.fn().mockImplementation(() => ({
