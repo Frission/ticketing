@@ -5,7 +5,7 @@ import { Ticket } from "../../models/Ticket"
 export class TicketCreatedListener extends NatsListener<TicketCreatedEvent> {
     readonly stream = NatsStream.Ticketing
     readonly subject = NatsSubject.TicketCreated
-    readonly durableName = "ticket-created-listener"
+    readonly durableName = "ticket-created-durable"
 
     async onMessage(data: TicketCreatedEvent["data"], msg: JsMsg): Promise<void> {
         try {

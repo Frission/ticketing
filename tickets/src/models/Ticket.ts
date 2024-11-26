@@ -15,6 +15,7 @@ interface TicketDoc extends Omit<mongoose.Document, "__v"> {
     price: number
     userId: string
     version: number
+    orderId?: string
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -32,6 +33,9 @@ const ticketSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        orderId: {
+            type: String
+        }
     },
     {
         toJSON: {
