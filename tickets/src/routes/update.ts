@@ -37,6 +37,10 @@ router.put("/api/tickets/:id", updateTicketMiddlewares, async (req: Request, res
         throw new NotFoundError()
     }
 
+    if(ticket.orderId != null) {
+        throw new BadRequestError("This ticket is currently reserved")
+    }
+
     if (ticket.userId !== req.currentUser?.id) {
         throw new NotAuthorizedError()
     }

@@ -3,6 +3,7 @@ import { app } from "../../app"
 import { testSignUp } from "../../test/signUpHelper"
 import mongoose from "mongoose"
 import { natsWrapper } from "../../util/NatsWrapper"
+import { Ticket } from "../../models/Ticket"
 
 describe("Ticket Updating tests", () => {
     let sessionCookie = [""]
@@ -94,6 +95,29 @@ describe("Ticket Updating tests", () => {
 
         expect(updateResponse.body.title).toEqual("updated")
         expect(updateResponse.body.price).toEqual(20)
+    })
+
+    it("rejects updates if the ticket is reserved", async () => {
+        const response = await request(app)
+            .post("/api/tickets")
+            .set("Cookie", sessionCookie)
+            .send({
+                title: "hello",
+                price: 10,
+            })
+            .expect(201)
+
+        const id = response.body.id
+        const ticket = await Ticket.findById(id)
+
+        ticket!.set({ orderId: "abc" })
+        await ticket!.save()
+
+        await request(app)
+            .put(`/api/tickets/${id}`)
+            .set("Cookie", sessionCookie)
+            .send({ title: "updated", price: 20 })
+            .expect(400)
     })
 
     it("publishes an event", async () => {

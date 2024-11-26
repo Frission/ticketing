@@ -16,7 +16,7 @@ jest.mock("@frissionapps/common/build/events/NatsListener")
 jest.mock("../events/publishers/TicketCreatedPublisher", () => {
     return {
         TicketCreatedPublisher: jest.fn().mockImplementation(() => ({
-            publish: jest.fn().mockImplementation(() => natsWrapper.client.publish()),
+            publish: jest.fn().mockImplementation((...args) => natsWrapper.client.publish(...args)),
         })),
     }
 })
@@ -24,7 +24,7 @@ jest.mock("../events/publishers/TicketCreatedPublisher", () => {
 jest.mock("../events/publishers/TicketUpdatedPublisher", () => {
     return {
         TicketUpdatedPublisher: jest.fn().mockImplementation(() => ({
-            publish: jest.fn().mockImplementation(() => natsWrapper.client.publish()),
+            publish: jest.fn().mockImplementation((...args) => natsWrapper.client.publish(...args)),
         })),
     }
 })

@@ -1,13 +1,13 @@
+import { OrderCancelledEvent } from "@frissionapps/common"
+import mongoose from "mongoose"
 import { JsMsg } from "nats"
 import { Ticket } from "../../../models/Ticket"
 import { natsWrapper } from "../../../util/NatsWrapper"
-import { OrderCreatedListener } from "../OrderCreatedListener"
-import { OrderCreatedEvent, OrderStatus } from "@frissionapps/common"
-import mongoose from "mongoose"
+import { OrderCancelledListener } from "../OrderCancelledListener"
 
-describe("Order Created Listener tests", () => {
+describe("Order Cancelled Listener tests", () => {
     const setup = async () => {
-        const listener = new OrderCreatedListener(natsWrapper.client)
+        const listener = new OrderCancelledListener(natsWrapper.client)
 
         const ticket = Ticket.build({
             title: "Ticket",
@@ -16,10 +16,9 @@ describe("Order Created Listener tests", () => {
         })
         await ticket.save()
 
-        const data: OrderCreatedEvent["data"] = {
+        const data: OrderCancelledEvent["data"] = {
             id: new mongoose.Types.ObjectId().toHexString(),
             version: 0,
-            status: OrderStatus.Created,
             userId: new mongoose.Types.ObjectId().toHexString(),
             expiresAt: new Date().toISOString(),
             ticket: {
@@ -36,14 +35,14 @@ describe("Order Created Listener tests", () => {
         return { listener, ticket, data, msg }
     }
 
-    it("sets the userId of the ticket", async () => {
+    it("removes the orderId of the ticket", async () => {
         const { listener, ticket, data, msg } = await setup()
 
         await listener.onMessage(data, msg)
 
         const updatedTicket = await Ticket.findById(ticket.id)
 
-        expect(updatedTicket!.orderId).toEqual(data.id)
+        expect(updatedTicket!.orderId).toBeUndefined()
     })
 
     it("acks the message", async () => {
@@ -61,11 +60,11 @@ describe("Order Created Listener tests", () => {
 
         expect(natsWrapper.client.publish).toHaveBeenLastCalledWith({
             id: ticket.id,
-            version: ticket.version + 1,
+            version: ticket.version,
             title: ticket.title,
             price: ticket.price,
             userId: ticket.userId,
-            orderId: data.id
+            orderId: undefined
         })
     })
 })
