@@ -1,3 +1,4 @@
+import { OrderCreatedListener } from "./events/listeners/OrderCreatedListener"
 import { natsWrapper } from "./util/NatsWrapper"
 
 const start = async () => {
@@ -15,6 +16,9 @@ const start = async () => {
                 console.error(err)
                 process.exit(1)
             })
+
+        await new OrderCreatedListener(natsWrapper.client).listen()
+
         console.log("Connected to NATS Server")
     } catch (err) {
         console.error(err)
