@@ -13,7 +13,7 @@ build:
               dockerfile: Dockerfile
           sync:
               manual:
-                  - src: "src/**/*.(ts|tsx|js|jsx)"
+                  - src: "**/*.(ts|js)"
                     dest: .
         - image: frission/tickets
           context: tickets
@@ -21,7 +21,7 @@ build:
               dockerfile: Dockerfile
           sync:
               manual:
-                  - src: "src/**/*.(ts|tsx|js|jsx)"
+                  - src: "**/*.(ts|js)"
                     dest: .
         - image: frission/orders
           context: orders
@@ -29,7 +29,7 @@ build:
               dockerfile: Dockerfile
           sync:
               manual:
-                  - src: "src/**/*.(ts|tsx|js|jsx)"
+                  - src: "**/*.(ts|js)"
                     dest: .
         - image: frission/client
           context: client
@@ -38,4 +38,12 @@ build:
           sync:
               manual:
                   - src: "**/*.(ts|tsx|js|jsx)"
+                    dest: .
+        - image: frission/expiration
+          context: expiration
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "**/*.(ts|js)"
                     dest: .
