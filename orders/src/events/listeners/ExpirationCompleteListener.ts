@@ -13,6 +13,10 @@ export class ExpirationCompleteListener extends NatsListener<ExpirationCompleteE
             const order = await Order.findById(data.orderId)
 
             if (order == null) throw new Error("Order not found")
+                
+            if (order.status == OrderStatus.Complete) {
+                return msg.ack()
+            }
 
             order.set({ status: OrderStatus.Cancelled })
             await order.save()

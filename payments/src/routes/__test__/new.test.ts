@@ -5,6 +5,7 @@ import request from "supertest"
 import { Order } from "../../models/Order"
 import { OrderStatus } from "@frissionapps/common"
 import { stripe } from "../../stripe"
+import { Payment } from "../../models/Payment"
 
 const userId = "123"
 
@@ -66,7 +67,7 @@ describe("Order Creation Tests", () => {
             .expect(400)
     })
 
-    it("returns a 204 with valid inputs", async () => {
+    it("returns a 201 with valid inputs", async () => {
         const order = Order.build({
             _id: new mongoose.Types.ObjectId().toHexString(),
             status: OrderStatus.Created,
@@ -85,10 +86,14 @@ describe("Order Creation Tests", () => {
             })
             .expect(201)
 
-            expect(stripe.charges.create).toHaveBeenCalledWith({
-                amount: order.price * 100,
-                currency: "usd",
-                source: "tok_visa"
-            })
+        expect(stripe.charges.create).toHaveBeenCalledWith({
+            amount: order.price * 100,
+            currency: "usd",
+            source: "tok_visa",
+        })
+
+        const payment = await Payment.findOne({ orderId: order.id })
+
+        expect(payment).not.toBeNull()
     })
 })

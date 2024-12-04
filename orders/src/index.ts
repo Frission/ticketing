@@ -5,6 +5,7 @@ import { natsWrapper } from "./util/NatsWrapper"
 import { TicketCreatedListener } from "./events/listeners/TicketCreatedListener"
 import { TicketUpdatedListener } from "./events/listeners/TicketUpdatedListener"
 import { ExpirationCompleteListener } from "./events/listeners/ExpirationCompleteListener"
+import { PaymentCreatedListener } from "./events/listeners/PaymentCreatedListener"
 
 const start = async () => {
     if (!process.env.JWT_KEY) throw new Error("ENV: JWT key must be defined")
@@ -35,6 +36,7 @@ const start = async () => {
         await new TicketCreatedListener(natsWrapper.client).listen()
         await new TicketUpdatedListener(natsWrapper.client).listen()
         await new ExpirationCompleteListener(natsWrapper.client).listen()
+        await new PaymentCreatedListener(natsWrapper.client).listen()
 
         console.log("Connected to NATS Server")
     } catch (err) {

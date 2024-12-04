@@ -1,6 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server"
 import mongoose from "mongoose"
-import { stripe } from "../stripe"
 
 const natsWrapper = {
     client: {
@@ -18,7 +17,7 @@ jest.mock("../stripe", () => {
     return {
         stripe: {
             charges: {
-                create: jest.fn().mockResolvedValue({}),
+                create: jest.fn().mockResolvedValue({ id: "stripeid" }),
             },
         },
     }
