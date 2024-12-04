@@ -4,6 +4,7 @@ import { testSignUp } from "../../test/signUpHelper"
 import request from "supertest"
 import { Order } from "../../models/Order"
 import { OrderStatus } from "@frissionapps/common"
+import { stripe } from "../../stripe"
 
 const userId = "123"
 
@@ -63,5 +64,31 @@ describe("Order Creation Tests", () => {
                 orderId: order.id,
             })
             .expect(400)
+    })
+
+    it("returns a 204 with valid inputs", async () => {
+        const order = Order.build({
+            _id: new mongoose.Types.ObjectId().toHexString(),
+            status: OrderStatus.Created,
+            version: 0,
+            price: 20,
+            userId,
+        })
+        await order.save()
+
+        await request(app)
+            .post("/api/payments")
+            .set("Cookie", sessionCookie)
+            .send({
+                token: "tok_visa",
+                orderId: order.id,
+            })
+            .expect(201)
+
+            expect(stripe.charges.create).toHaveBeenCalledWith({
+                amount: order.price * 100,
+                currency: "usd",
+                source: "tok_visa"
+            })
     })
 })
