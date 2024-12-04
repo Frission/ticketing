@@ -5,6 +5,7 @@
 .vscode/
 _nats-demo/
 replace.sh
+notes.txt
 
 # Logs
 logs
