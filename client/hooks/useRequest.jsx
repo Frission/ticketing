@@ -7,14 +7,15 @@ import axios from "axios"
  * @param {!("post" | "get" | "put" | "delete")} config.method - Request method, lowercase
  * @param {?string} config.body - Parameters to send inside the body if this is a post or put request
  * @param {?() => Object} config.onSuccess - Callback to be invoked when request succeeds
+ * @returns {[() => void, React.ReactElement]}
  */
 export const useRequest = ({ url, method, body, onSuccess }) => {
     const [errors, setErrors] = React.useState(null)
 
-    const doRequest = async () => {
+    const doRequest = async (props = {}) => {
         try {
             setErrors(null)
-            const response = await axios[method](url, body)
+            const response = await axios[method](url, { ...body, ...props })
             if (onSuccess) {
                 onSuccess(response.data)
             }
