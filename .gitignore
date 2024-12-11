@@ -6,6 +6,7 @@
 _nats-demo/
 replace.sh
 notes.txt
+.DS_Store
 
 # Logs
 logs
