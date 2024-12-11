@@ -23,21 +23,13 @@ jest.mock("../stripe", () => {
     }
 })
 
-// jest.mock("../events/publishers/TicketCreatedPublisher", () => {
-//     return {
-//         TicketCreatedPublisher: jest.fn().mockImplementation(() => ({
-//             publish: jest.fn().mockImplementation((...args) => natsWrapper.client.publish(...args)),
-//         })),
-//     }
-// })
-
-// jest.mock("../events/publishers/TicketUpdatedPublisher", () => {
-//     return {
-//         TicketUpdatedPublisher: jest.fn().mockImplementation(() => ({
-//             publish: jest.fn().mockImplementation((...args) => natsWrapper.client.publish(...args)),
-//         })),
-//     }
-// })
+jest.mock("../events/publishers/PaymentCreatedPublisher", () => {
+    return {
+        PaymentCreatedPublisher: jest.fn().mockImplementation(() => ({
+            publish: jest.fn().mockImplementation((...args) => natsWrapper.client.publish(...args)),
+        })),
+    }
+})
 
 let mongo: MongoMemoryServer
 
