@@ -20,3 +20,10 @@ spec:
                         value: "nats://nats-srv:4222"
                       - name: REDIS_HOST
                         value: expiration-redis-srv
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "250m" # m stands for millicores (0.5 CPU)
+                      limits:
+                          memory: "512Mi"
+                          cpu: "500m"
