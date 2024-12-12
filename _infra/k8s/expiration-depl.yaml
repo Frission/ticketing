@@ -22,8 +22,8 @@ spec:
                         value: expiration-redis-srv
                   resources:
                       requests:
-                          memory: "350Mi"
-                          cpu: "400m" # m stands for millicores (0.4 CPU)
+                          memory: "256Mi"
+                          cpu: "250m" # m stands for millicores (0.25 CPU)
                       limits:
                           memory: "512Mi"
                           cpu: "500m"
