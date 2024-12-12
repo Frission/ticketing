@@ -28,4 +28,6 @@ jobs:
                     --project ${{ secrets.GCP_PROJECT_ID }}
 
             - name: Apply K8S Configurations
-              run: kubectl apply -f ./_infra/k8s/*
+              run: |
+                  kubectl apply -f ./_infra/k8s/*
+                  kubectl apply -f ./_infra/k8s-prod/*
