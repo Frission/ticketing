@@ -6,6 +6,7 @@ on:
             - main
         paths:
             - "_infra/**"
+    workflow_dispatch:
 
 jobs:
     build:
