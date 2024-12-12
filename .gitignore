@@ -7,6 +7,7 @@ _nats-demo/
 replace.sh
 notes.txt
 .DS_Store
+microservices-*.json
 
 # Logs
 logs
