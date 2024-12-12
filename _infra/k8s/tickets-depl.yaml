@@ -15,7 +15,6 @@ spec:
             containers:
                 - name: tickets
                   image: frission/tickets:latest
-                  imagePullPolicy: Never
                   env:
                       - name: MONGO_URI
                         value: "mongodb://tickets-mongo-srv:27017/tickets"

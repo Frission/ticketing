@@ -15,7 +15,6 @@ spec:
             containers:
                 - name: expiration
                   image: frission/expiration:latest
-                  imagePullPolicy: Never
                   env:
                       - name: NATS_URL
                         value: "nats://nats-srv:4222"

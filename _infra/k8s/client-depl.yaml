@@ -15,7 +15,6 @@ spec:
             containers:
                 - name: client
                   image: frission/client:latest
-                  imagePullPolicy: Never
                   resources:
                       limits:
                           memory: "512M"

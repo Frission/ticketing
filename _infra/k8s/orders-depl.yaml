@@ -15,7 +15,6 @@ spec:
             containers:
                 - name: orders
                   image: frission/orders:latest
-                  imagePullPolicy: Never
                   env:
                       - name: MONGO_URI
                         value: "mongodb://orders-mongo-srv:27017/orders"
