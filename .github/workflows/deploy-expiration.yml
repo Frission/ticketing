@@ -1,11 +1,11 @@
-name: deploy-auth
+name: deploy-expiration
 
 on:
     push:
         branches:
             - main
         paths:
-            - "auth/**"
+            - "expiration/**"
     workflow_dispatch: 
 
 jobs:
@@ -13,12 +13,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - run: cd auth && docker build --platform linux/amd64 -t frission/auth .
+            - run: cd expiration && docker build --platform linux/amd64 -t frission/expiration .
             - run: docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
               env:
                   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
                   DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-            - run: docker push frission/auth
+            - run: docker push frission/expiration
 
             # Step 2: Authenticate to Google Cloud
             - name: Authenticate to Google Cloud
@@ -33,7 +33,6 @@ jobs:
             - name: Install gke-gcloud-auth-plugin
               run: gcloud components install gke-gcloud-auth-plugin
 
-
             # Step 4: Get GKE cluster credentials
             - name: Get GKE credentials
               run: |
@@ -43,7 +42,7 @@ jobs:
 
             # Step 6: Deploy to GKE
             - name: Deploy to GKE
-              run: kubectl set image deployment/auth-depl auth=frission/auth
+              run: kubectl set image deployment/expiration-depl expiration=frission/expiration
 
             - name: Restart Deployment
-              run: kubectl rollout restart deployment/auth-depl
+              run: kubectl rollout restart deployment/expiration-depl

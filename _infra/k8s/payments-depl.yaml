@@ -15,7 +15,6 @@ spec:
             containers:
                 - name: payments
                   image: frission/payments:latest
-                  imagePullPolicy: Never
                   env:
                       - name: MONGO_URI
                         value: "mongodb://payments-mongo-srv:27017/payments"
@@ -31,6 +30,13 @@ spec:
                             secretKeyRef:
                                 name: stripe-secret
                                 key: STRIPE_KEY
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "250m" # m stands for millicores (0.25 CPU)
+                      limits:
+                          memory: "512Mi"
+                          cpu: "500m"
 ---
 apiVersion: v1
 kind: Service

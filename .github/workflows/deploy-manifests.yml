@@ -21,6 +21,9 @@ jobs:
 
             - name: Set up Google Cloud SDK
               uses: google-github-actions/setup-gcloud@v2
+            
+            - name: Install gke-gcloud-auth-plugin
+              run: gcloud components install gke-gcloud-auth-plugin
 
             - name: Get GKE credentials
               run: |
@@ -30,5 +33,5 @@ jobs:
 
             - name: Apply K8S Configurations
               run: |
-                  kubectl apply -f ./_infra/k8s/*
-                  kubectl apply -f ./_infra/k8s-prod/*
+                  kubectl apply -f ./_infra/k8s
+                  kubectl apply -f ./_infra/k8s-prod
