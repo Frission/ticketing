@@ -21,6 +21,11 @@ jobs:
 
             - name: Set up Google Cloud SDK
               uses: google-github-actions/setup-gcloud@v2
+            
+            - name: Install gke-gcloud-auth-plugin
+              run: |
+                apt-get update
+                apt-get install -y gke-gcloud-auth-plugin
 
             - name: Get GKE credentials
               run: |
